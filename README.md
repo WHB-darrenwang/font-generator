@@ -1,4 +1,4 @@
-# Font Maker
+# Font Maker for Mac
 
 A desktop application for creating handwritten fonts. Draw glyphs on a canvas and export them as TTF or OTF font files.
 
