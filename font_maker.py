@@ -3,6 +3,7 @@
 import tkinter as tk
 from tkinter import filedialog, messagebox, simpledialog, ttk
 import os
+import shutil
 
 from canvas_manager import CanvasManager
 from glyph_list import GlyphListPanel
@@ -409,9 +410,23 @@ class FontMaker:
                 is_ttf=is_ttf,
             )
             progress_win.destroy()
+
+            # Auto-install to macOS Font Book
+            install_msg = ""
+            fonts_dir = os.path.expanduser("~/Library/Fonts")
+            if os.path.isdir(fonts_dir):
+                font_filename = os.path.basename(output_path)
+                install_path = os.path.join(fonts_dir, font_filename)
+                try:
+                    shutil.copy2(output_path, install_path)
+                    install_msg = "\n\nInstalled to Font Book automatically."
+                except Exception:
+                    install_msg = "\n\nFailed to install to Font Book."
+
             messagebox.showinfo("Export Complete",
                                 f"Font saved to:\n{output_path}\n\n"
-                                f"Glyphs exported: {len(glyph_paths)}")
+                                f"Glyphs exported: {len(glyph_paths)}"
+                                f"{install_msg}")
         except Exception as e:
             progress_win.destroy()
             messagebox.showerror("Export Error", str(e))
